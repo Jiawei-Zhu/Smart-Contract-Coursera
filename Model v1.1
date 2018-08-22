@@ -1,0 +1,39 @@
+pragma solidity ^0.4.0; 
+ 
+contract Charity{ 
+ 
+ function getBalance() returns (uint){
+      return this.balance;
+ }  //查看合约自身 Ether 余额 
+ 
+ 
+ address toWho;  //定义受助人地址 
+ 
+ 
+ function Transfer(address _toWho) payable{
+     toWho = _toWho;  //地址赋值 
+ 
+ 
+     //msg.sender   调用合约的捐款人地址        
+     //msg.value    调用合约的捐款人转发的货币量，以 wei 为单位。 
+ 
+ 
+     uint numerator  = 1 * 10 ** 3;         
+     uint denominator = 100;         
+     uint quotient =  ((numerator / denominator) + 5) / 10;                 
+     //numerator 分子 denominator 分母 quotient 商         
+     //quotient 为手续费占比 
+ 
+ 
+     this.transfer(msg.value); //转账到当前合约 
+ 
+      toWho.transfer(msg.value * (1-quotient)); //转出到受助人地址  
+ 
+ } 
+ 
+    function() payable{} //fallback function 
+ 
+}   
+ 
+/*transfer：从合约发起方向某个地址转入以太币(单位是 wei)，地址无效或者合约
+发起方余额不足时，代码将抛出异常并停止转账。*/ 
